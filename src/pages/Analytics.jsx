@@ -29,7 +29,6 @@ ChartJS.register(
 
 function Analytics() {
   const [journals, setJournals] = useState([]);
-  const [user, setUser] = useState(null);
   const [message, setMessage] = useState("");
 
   useEffect(() => {
@@ -40,23 +39,16 @@ function Analytics() {
     try {
       const token = localStorage.getItem("token");
 
-      const [journalResponse, userResponse] =
-        await Promise.all([
-          axios.get("https://mindwell-backend-rdph.onrender.com/api/journal", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }),
-
-          axios.get("https://mindwell-backend-rdph.onrender.com/api/auth/me", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }),
-        ]);
+      const journalResponse = await axios.get(
+        "https://mindwell-backend-rdph.onrender.com/api/journal",
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       setJournals(journalResponse.data);
-      setUser(userResponse.data.user);
     } catch (error) {
       setMessage(
         error.response?.data?.message ||
@@ -342,78 +334,6 @@ function Analytics() {
           </div>
         )}
 
-        {/* PRO */}
-
-        <section className="pro-section">
-
-          <div className="pro-card">
-
-            <div className="pro-content">
-
-              <span className="pro-badge">
-                ⭐ PRO
-              </span>
-
-              <h2>
-                Advanced Wellness Analytics
-              </h2>
-
-              <p>
-                Get deeper insights into your mood and
-                emotional patterns with MindWell Pro.
-              </p>
-
-            </div>
-
-            {user?.isPro ? (
-
-              <span className="pro-active">
-                Pro Active ✓
-              </span>
-
-            ) : (
-
-              <button
-                className="secondary-btn"
-                onClick={() =>
-                  setMessage(
-                    "MindWell Pro will be available soon."
-                  )
-                }
-              >
-                Explore Pro
-              </button>
-
-            )}
-
-          </div>
-
-          <div className="pro-features">
-
-            <div>
-              📈
-              <span>Advanced mood trends</span>
-            </div>
-
-            <div>
-              🔎
-              <span>Unlimited history search</span>
-            </div>
-
-            <div>
-              📊
-              <span>Detailed wellness reports</span>
-            </div>
-
-            <div>
-              ⭐
-              <span>Premium insights</span>
-            </div>
-
-          </div>
-
-        </section>
-
         {/* BACK */}
 
         <Link
@@ -429,4 +349,3 @@ function Analytics() {
 }
 
 export default Analytics;
-
